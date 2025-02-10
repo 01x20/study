@@ -2,22 +2,10 @@ import { useState } from 'react';
 import './App.css';
 import MemoContainer from './components/MemoContainer';
 import SideBar from './components/SideBar';
+import { setItem, getItem } from './lib/storage';
 
 function App() {
-  const [memos, setMemos] = useState([
-    {
-      title: 'Memo 1',
-      content: 'This is memo 1',
-      createdAt: 1738913688881, //시간 값
-      updatedAt: 1738913688881, //시간 값
-    },
-    {
-      title: 'Memo 2',
-      content: 'This is memo 2',
-      createdAt: 1738913706955, //시간 값
-      updatedAt: 1738913706955, //시간 값
-    },
-  ]);
+  const [memos, setMemos] = useState(getItem('memo') || []);
 
   const [selectedMemoIndex, setSelectedMemoIndex] = useState(0);
 
@@ -27,11 +15,12 @@ function App() {
     newMemos[selectedMemoIndex] = newMemo;
 
     setMemos(newMemos);
+    setItem('memo', newMemos);
   };
 
   const addMemo = () => {
     const now = new Date().getTime();
-    setMemos([
+    const newMemos = [
       ...memos,
       {
         title: 'Untitled',
@@ -39,8 +28,11 @@ function App() {
         createdAt: now,
         updatedAt: now,
       },
-    ]);
+    ];
+
+    setMemos(newMemos);
     setSelectedMemoIndex(memos.length);
+    setItem('memo', newMemos);
   };
 
   const deleteMemo = (index) => {
@@ -52,6 +44,7 @@ function App() {
     if (index === selectedMemoIndex) {
       setSelectedMemoIndex(0);
     }
+    setItem('memo', newMemos);
   };
 
   return (
