@@ -1,6 +1,7 @@
-import MemoList from './MemoList';
-import SideBarHeader from './SideBarHeader';
-import SideBarFooter from './SideBarFooter';
+import MemoList from '../MemoList';
+import SideBarHeader from '../SideBarHeader';
+import SideBarFooter from '../SideBarFooter';
+import './index.css';
 
 function SideBar({
   memos,
