@@ -14,46 +14,54 @@ function App() {
 
   const setMemo = useCallback(
     (newMemo) => {
-      const newMemos = [...memos];
+      setMemos((memos) => {
+        const newMemos = [...memos];
 
-      newMemos[selectedMemoIndex] = newMemo;
+        newMemos[selectedMemoIndex] = newMemo;
+        debounceSetItem('memo', newMemos);
 
-      setMemos(newMemos);
-      debounceSetItem('memo', newMemos);
+        return newMemos;
+      });
     },
-    [memos, selectedMemoIndex],
+    [selectedMemoIndex],
   );
 
   const addMemo = useCallback(() => {
-    const now = new Date().getTime();
-    const newMemos = [
-      ...memos,
-      {
-        title: 'Untitled',
-        content: '',
-        createdAt: now,
-        updatedAt: now,
-      },
-    ];
+    setMemos((memos) => {
+      const now = new Date().getTime();
+      const newMemos = [
+        ...memos,
+        {
+          title: 'Untitled',
+          content: '',
+          createdAt: now,
+          updatedAt: now,
+        },
+      ];
 
-    setMemos(newMemos);
+      debounceSetItem('memo', newMemos);
+
+      return newMemos;
+    });
+
     setSelectedMemoIndex(memos.length);
-    debounceSetItem('memo', newMemos);
   }, [memos]);
 
   const deleteMemo = useCallback(
     (index) => {
-      const newMemos = [...memos];
+      setMemos((memos) => {
+        const newMemos = [...memos];
 
-      newMemos.splice(index, 1);
+        newMemos.splice(index, 1);
+        debounceSetItem('memo', newMemos);
 
-      setMemos(newMemos);
+        return newMemos;
+      });
       if (index === selectedMemoIndex) {
         setSelectedMemoIndex(0);
       }
-      debounceSetItem('memo', newMemos);
     },
-    [memos, selectedMemoIndex],
+    [selectedMemoIndex],
   );
 
   return (
